@@ -27,11 +27,6 @@ public class ProviderServiceImpl implements ProviderService {
         return providerRepository.save(provider);
     }
 
-    public Optional<Provider> incSold(AppId appId) {
-        Optional<Provider> providerOpt = providerRepository.findById(appId);
-        return providerOpt.map(x -> providerRepository.save(x.increaseSold()));
-    }
-
     public Optional<Provider> findById(AppId appId) {
         return providerRepository.findById(appId);
     }

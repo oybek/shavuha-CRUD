@@ -21,11 +21,6 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.save(customer);
     }
 
-    public Optional<Customer> incBought(AppId appId) {
-        Optional<Customer> customerOpt = customerRepository.findById(appId);
-        return customerOpt.map(x -> customerRepository.save(x.increaseBought()));
-    }
-
     public Optional<Customer> findById(AppId appId) {
         return customerRepository.findById(appId);
     }

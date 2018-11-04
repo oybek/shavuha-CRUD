@@ -5,11 +5,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -20,6 +18,7 @@ import java.io.Serializable;
 public class Provider implements Serializable {
 
     @EmbeddedId
+    @Column(name = "appid")
     private AppId appId;
 
     @Column(name = "name")
@@ -37,13 +36,10 @@ public class Provider implements Serializable {
     @Column(name = "longitude")
     private float longitude;
 
-    // How many shaurms he bought
-    @Column(name = "sold")
-    private long sold;
-
-    public Provider increaseSold() {
-        sold++;
-        return this;
-    }
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "provider_product"
+            , joinColumns = @JoinColumn(name="provider_appid")
+            , inverseJoinColumns = @JoinColumn(name="product_id"))
+    private Set<Product> products;
 }
 
