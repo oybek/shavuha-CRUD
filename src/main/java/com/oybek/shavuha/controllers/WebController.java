@@ -1,7 +1,8 @@
 package com.oybek.shavuha.controllers;
 
 import com.oybek.shavuha.entities.Customer;
-import com.oybek.shavuha.repositories.CustomerRepository;
+import com.oybek.shavuha.services.CustomerService;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,42 +10,41 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class WebController {
 
-	private CustomerRepository repository;
+    private CustomerService customerService;
 
-	WebController(CustomerRepository repository) {
-	    this.repository = repository;
+	WebController(CustomerService customerService) {
+	    this.customerService = customerService;
 	}
 
-	@RequestMapping("/init")
-	public String process(){
-		repository.save(new Customer("Jack", "Smith"));
-		repository.save(new Customer("Adam", "Johnson"));
-		repository.save(new Customer("Tom", "Cruse"));
-		repository.save(new Customer("Brett", "Pit"));
-		repository.save(new Customer("Will", "Smith"));
+	@RequestMapping("/testInit")
+	public String testInit(){
+		customerService.save(new Customer("Jack", "Smith"));
+		customerService.save(new Customer("Adam", "Johnson"));
+		customerService.save(new Customer("Tom", "Cruse"));
+		customerService.save(new Customer("Brett", "Pit"));
+		customerService.save(new Customer("Will", "Smith"));
 
 		return "ok";
 	}
 
-	@RequestMapping("/findAll")
-	public Iterable<Customer> findAll(){
-	    return repository.findAll();
+	@RequestMapping("/createCustomer")
+	public Customer createCustomer(@RequestBody Customer customer) {
+		return customerService.save(customer);
 	}
 
 	@RequestMapping("/findById")
 	public Customer findById(@RequestParam("id") long id) {
-		return repository.findById(id).orElse(null);
+		return customerService.findById(id).orElse(null);
 	}
 
-	@RequestMapping("/findByLastname")
-	public String fetchDataByLastName(@RequestParam("lastname") String lastName){
-		String result = "";
+	@RequestMapping("/incBought")
+	public Customer incBought(@RequestParam("id") long id) {
+		return customerService.incBought(id);
+	}
 
-		for(Customer cust: repository.findByLastName(lastName)){
-			result += cust.toString() + "<br>";
-		}
-
-		return result;
+	@RequestMapping("/findAll")
+	public Iterable<Customer> findAll() {
+	    return customerService.findAll();
 	}
 }
 
