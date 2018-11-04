@@ -17,6 +17,7 @@ import java.io.Serializable;
 public class Customer implements Serializable {
 
     @EmbeddedId
+    @Column(name = "appid")
 	private AppId appId;
 
 	@Column(name = "firstname")
@@ -26,12 +27,6 @@ public class Customer implements Serializable {
 	private String lastName;
 
 	public Customer(AppId appId, String firstName, String lastName) {
-		this.appId = appId;
-		this.firstName = firstName;
-		this.lastName = lastName;
-	}
-
-	public Customer(AppId appId, String firstName, String lastName, long bought) {
 		this.appId = appId;
 		this.firstName = firstName;
 		this.lastName = lastName;

@@ -26,8 +26,7 @@ public class Product implements Serializable {
     @Column(name = "cost")
     private long cost;
 
-    Product(long id, String name, long cost) {
-        this.id = id;
+    public Product(String name, long cost) {
         this.name = name;
         this.cost = cost;
     }

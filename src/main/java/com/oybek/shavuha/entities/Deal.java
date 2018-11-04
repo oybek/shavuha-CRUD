@@ -14,24 +14,30 @@ import java.util.Set;
 @Setter
 @ToString
 @NoArgsConstructor
-@Table(name = "product")
-public class Order implements Serializable {
+@Table(name = "deal")
+public class Deal implements Serializable {
 
     @Id
     @GeneratedValue
     private long id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "provider_appid")
+    @JoinColumns({
+            @JoinColumn(name = "customer_app", insertable = false, updatable = false),
+            @JoinColumn(name = "customer_id", insertable = false, updatable = false)
+    })
     private Provider provider;
 
-    @OneToOne(optional = false)
-    @JoinColumn(name = "customer_appid")
+    @ManyToOne(optional = false)
+    @JoinColumns({
+            @JoinColumn(name = "customer_app", insertable = false, updatable = false),
+            @JoinColumn(name = "customer_id", insertable = false, updatable = false)
+    })
     private Customer customer;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "order_product"
-            , joinColumns = @JoinColumn(name="order_id")
+    @JoinTable(name = "deal_product"
+            , joinColumns = @JoinColumn(name="deal_id")
             , inverseJoinColumns = @JoinColumn(name="product_id"))
     private Set<Product> product;
 

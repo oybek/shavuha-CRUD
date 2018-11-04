@@ -14,7 +14,7 @@ import java.util.Set;
 @Setter
 @ToString
 @NoArgsConstructor
-@Table(name = "customer")
+@Table(name = "provider")
 public class Provider implements Serializable {
 
     @EmbeddedId
@@ -38,8 +38,21 @@ public class Provider implements Serializable {
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "provider_product"
-            , joinColumns = @JoinColumn(name="provider_appid")
+            , joinColumns = {
+                @JoinColumn(name = "provider_app"),
+                @JoinColumn(name = "provider_id")
+            }
             , inverseJoinColumns = @JoinColumn(name="product_id"))
     private Set<Product> products;
+
+    public Provider(AppId appId, String name, String firstName, String lastName, float latitude, float longitude, Set<Product> products) {
+        this.appId = appId;
+        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.products = products;
+    }
 }
 
