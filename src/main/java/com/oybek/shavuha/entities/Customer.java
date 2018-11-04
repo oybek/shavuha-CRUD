@@ -16,9 +16,8 @@ import java.io.Serializable;
 @Table(name = "customer")
 public class Customer implements Serializable {
 
-    @Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+    @EmbeddedId
+	private AppId appId;
 
 	@Column(name = "firstname")
 	private String firstName;
@@ -30,13 +29,15 @@ public class Customer implements Serializable {
 	@Column(name = "bought")
 	private long bought;
 
-	public Customer(String firstName, String lastName) {
+	public Customer(AppId appId, String firstName, String lastName) {
+		this.appId = appId;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.bought = 0;
 	}
 
-	public Customer(String firstName, String lastName, long bought) {
+	public Customer(AppId appId, String firstName, String lastName, long bought) {
+		this.appId = appId;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.bought = 0;

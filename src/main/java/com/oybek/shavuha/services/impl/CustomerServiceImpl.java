@@ -1,5 +1,6 @@
 package com.oybek.shavuha.services.impl;
 
+import com.oybek.shavuha.entities.AppId;
 import com.oybek.shavuha.entities.Customer;
 import com.oybek.shavuha.repositories.CustomerRepository;
 import com.oybek.shavuha.services.CustomerService;
@@ -20,13 +21,13 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.save(customer);
     }
 
-    public Customer incBought(long id) {
-        Optional<Customer> customerOpt = customerRepository.findById(id);
-        return customerOpt.map(x -> customerRepository.save(x.increaseBought())).orElse(null);
+    public Optional<Customer> incBought(AppId appId) {
+        Optional<Customer> customerOpt = customerRepository.findById(appId);
+        return customerOpt.map(x -> customerRepository.save(x.increaseBought()));
     }
 
-    public Optional<Customer> findById(long id) {
-        return customerRepository.findById(id);
+    public Optional<Customer> findById(AppId appId) {
+        return customerRepository.findById(appId);
     }
 
     public Iterable<Customer> findAll() {
