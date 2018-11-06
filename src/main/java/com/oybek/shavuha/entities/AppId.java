@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 
@@ -13,9 +14,11 @@ import java.io.Serializable;
 @Embeddable
 @NoArgsConstructor
 public class AppId implements Serializable {
-    @NonNull
+
+    @Column(name = "app")
     private String app;
-    @NonNull
+
+    @Column(name = "id")
     private String id;
 
     public AppId(String app, String id) {

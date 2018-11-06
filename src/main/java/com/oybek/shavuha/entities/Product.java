@@ -30,4 +30,10 @@ public class Product implements Serializable {
         this.name = name;
         this.cost = cost;
     }
+
+    public Product(long id, String name, long cost) {
+        this.id = id;
+        this.name = name;
+        this.cost = cost;
+    }
 }

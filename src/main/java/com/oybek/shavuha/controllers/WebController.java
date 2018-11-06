@@ -1,10 +1,8 @@
 package com.oybek.shavuha.controllers;
 
-import com.oybek.shavuha.entities.AppId;
-import com.oybek.shavuha.entities.Customer;
-import com.oybek.shavuha.entities.Product;
-import com.oybek.shavuha.entities.Provider;
+import com.oybek.shavuha.entities.*;
 import com.oybek.shavuha.services.CustomerService;
+import com.oybek.shavuha.services.DealService;
 import com.oybek.shavuha.services.ProviderService;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,12 +14,14 @@ import java.util.Set;
 @RestController
 public class WebController {
 
+	private DealService dealService;
     private CustomerService customerService;
     private ProviderService providerService;
 
-	WebController(CustomerService customerService, ProviderService providerService) {
+	WebController(CustomerService customerService, ProviderService providerService, DealService dealService) {
 	    this.customerService = customerService;
 	    this.providerService = providerService;
+	    this.dealService = dealService;
 	}
 
 	@RequestMapping("/testInit")
@@ -50,6 +50,16 @@ public class WebController {
 	@RequestMapping("/createProvider")
 	public Provider createProvider(@RequestBody Provider provider) {
 		return providerService.save(provider);
+	}
+
+	@RequestMapping("/createDeal")
+	public Optional<Deal> createDeal(@RequestBody Deal deal) {
+	    return dealService.save(deal);
+	}
+
+	@RequestMapping("/findDeal")
+	public Optional<Deal> findDeal(long id) {
+	    return dealService.findById(id);
 	}
 
 	@RequestMapping("/findCustomer")

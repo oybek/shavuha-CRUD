@@ -7,6 +7,9 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -36,6 +39,9 @@ public class Provider implements Serializable {
     @Column(name = "longitude")
     private float longitude;
 
+    @Column(name = "work_date")
+    private Date workDate;
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "provider_product"
             , joinColumns = {
@@ -44,6 +50,13 @@ public class Provider implements Serializable {
             }
             , inverseJoinColumns = @JoinColumn(name="product_id"))
     private Set<Product> products;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumns({
+            @JoinColumn(name = "app", referencedColumnName = "app", updatable = false, insertable = false),
+            @JoinColumn(name = "id", referencedColumnName = "id", updatable = false, insertable = false)
+    })
+    private List<Deal> dealList = new ArrayList<>();
 
     public Provider(AppId appId, String name, String firstName, String lastName, float latitude, float longitude, Set<Product> products) {
         this.appId = appId;
