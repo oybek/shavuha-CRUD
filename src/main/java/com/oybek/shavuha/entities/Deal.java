@@ -20,15 +20,15 @@ public class Deal implements Serializable {
 
     @ManyToOne
     @JoinColumns({
-            @JoinColumn(name = "provider_app", referencedColumnName = "app"),
-            @JoinColumn(name = "provider_id", referencedColumnName = "id")
+            @JoinColumn(name = "provider_app", referencedColumnName = "app", updatable = false),
+            @JoinColumn(name = "provider_id", referencedColumnName = "id", updatable = false)
     })
     private Provider provider;
 
     @ManyToOne
     @JoinColumns({
-            @JoinColumn(name = "customer_app"),
-            @JoinColumn(name = "customer_id")
+            @JoinColumn(name = "customer_app", updatable = false),
+            @JoinColumn(name = "customer_id", updatable = false)
     })
     private Customer customer;
 
