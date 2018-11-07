@@ -1,6 +1,5 @@
 package com.oybek.shavuha.services.impl;
 
-import com.oybek.shavuha.entities.AppId;
 import com.oybek.shavuha.entities.Customer;
 import com.oybek.shavuha.entities.Deal;
 import com.oybek.shavuha.entities.Provider;
@@ -10,6 +9,7 @@ import com.oybek.shavuha.repositories.ProviderRepository;
 import com.oybek.shavuha.services.DealService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -38,11 +38,18 @@ public class DealServiceImpl implements DealService {
             return Optional.empty();
         }
 
-        deal.setProvider(providerOpt.get());
-        deal.setCustomer(customerOpt.get());
-        providerOpt.get().addDeal(deal);
+        providerOpt.map( provider -> {
+            deal.setProvider(provider);
+            provider.addDeal(deal);
+            return providerRepository.save(provider);
+        });
 
-        providerRepository.save(providerOpt.get());
+        customerOpt.map( customer -> {
+            deal.setCustomer(customer);
+            customer.addDeal(deal);
+            return customerRepository.save(customer);
+        });
+
         return Optional.ofNullable(dealRepository.save(deal));
     }
 
@@ -54,11 +61,11 @@ public class DealServiceImpl implements DealService {
         return dealRepository.findById(id).map(x -> dealRepository.save(x.close()));
     }
 
-    public boolean hasOpenDeal(Customer customer) {
-        return !dealRepository.findByCustomerAndClosedFalse(customer).isEmpty();
+    public List<Deal> getOpenDeals(Customer customer) {
+        return dealRepository.findByCustomerAndOpenTrue(customer);
     }
 
-    public long countByCustomer(AppId appId) {
-        return customerRepository.findById(appId).map(x -> dealRepository.countByCustomer(x)).orElse(0L);
+    public List<Deal> getOpenDeals(Provider provider) {
+        return dealRepository.findByProviderAndOpenTrue(provider);
     }
 }

@@ -42,11 +42,11 @@ public class Deal implements Serializable {
     private Set<Product> product;
 
     // deal is complete when provider entered deal id
-    @Column(name = "closed")
-    private boolean closed = false;
+    @Column(name = "open")
+    private boolean open = true;
 
     public Deal close() {
-        this.closed = true;
+        this.open = false;
         return this;
     }
 }

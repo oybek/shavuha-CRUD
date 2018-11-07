@@ -1,9 +1,10 @@
 package com.oybek.shavuha.services;
 
-import com.oybek.shavuha.entities.AppId;
 import com.oybek.shavuha.entities.Customer;
 import com.oybek.shavuha.entities.Deal;
+import com.oybek.shavuha.entities.Provider;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface DealService {
@@ -11,8 +12,6 @@ public interface DealService {
     Optional<Deal> findById(long id);
     Optional<Deal> closeById(long id);
 
-    // returns true if customer has uncomplete deals
-    boolean hasOpenDeal(Customer customer);
-
-    long countByCustomer(AppId appId);
+    List<Deal> getOpenDeals(Customer customer);
+    List<Deal> getOpenDeals(Provider provider);
 }
