@@ -29,7 +29,7 @@ public class CustomerControllerTest {
     private HttpHeaders headers = new HttpHeaders();
 
     @Test
-    public void testCustomerSaveOk() {
+    public void testCustomerSave() {
         Customer customer = new Customer(
                 new AppId("app", "0")
                 , "John"
@@ -55,21 +55,42 @@ public class CustomerControllerTest {
 
     @Test
     public void testCustomerFind() {
-        HttpEntity<Customer> entity = new HttpEntity<>(null, headers);
+        // save
+        {
+            Customer customer = new Customer(
+                    new AppId("app", "0")
+                    , "John"
+                    , "Smith"
+            );
 
-        ResponseEntity<Customer> response = restTemplate.exchange(
-                createLocalURL("/customer/find?app=app&id=0")
-                , HttpMethod.GET
-                , entity
-                , Customer.class
-        );
+            HttpEntity<Customer> entity = new HttpEntity<>(customer, headers);
 
-        Customer returnedCustomer = response.getBody();
+            ResponseEntity<Customer> response = restTemplate.exchange(
+                    createLocalURL("/customer/save")
+                    , HttpMethod.POST
+                    , entity
+                    , Customer.class
+            );
+        }
 
-        assert(returnedCustomer != null);
-        assert(new AppId("app", "0").equals(returnedCustomer.getAppId()));
-        assert("John".equals(returnedCustomer.getFirstName()));
-        assert("Smith".equals(returnedCustomer.getLastName()));
+        // find
+        {
+            HttpEntity<Customer> entity = new HttpEntity<>(null, headers);
+
+            ResponseEntity<Customer> response = restTemplate.exchange(
+                    createLocalURL("/customer/find?app=app&id=0")
+                    , HttpMethod.GET
+                    , entity
+                    , Customer.class
+            );
+
+            Customer returnedCustomer = response.getBody();
+
+            assert (returnedCustomer != null);
+            assert (new AppId("app", "0").equals(returnedCustomer.getAppId()));
+            assert ("John".equals(returnedCustomer.getFirstName()));
+            assert ("Smith".equals(returnedCustomer.getLastName()));
+        }
     }
 
     @Test
