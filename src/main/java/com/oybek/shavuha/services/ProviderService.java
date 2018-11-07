@@ -1,6 +1,7 @@
 package com.oybek.shavuha.services;
 
 import com.oybek.shavuha.entities.AppId;
+import com.oybek.shavuha.entities.Deal;
 import com.oybek.shavuha.entities.Provider;
 import com.sun.javafx.geom.Vec2f;
 
@@ -12,4 +13,5 @@ public interface ProviderService {
     Optional<Provider> findById(AppId appId);
     Iterable<Provider> findAll();
     List<Provider> findNearest(Vec2f pos, int n);
+    List<Deal> getDeals(AppId appId);
 }

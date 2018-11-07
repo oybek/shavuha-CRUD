@@ -1,9 +1,7 @@
 package com.oybek.shavuha.entities;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -51,21 +49,25 @@ public class Provider implements Serializable {
             , inverseJoinColumns = @JoinColumn(name="product_id"))
     private Set<Product> products;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumns({
-            @JoinColumn(name = "app", referencedColumnName = "app", updatable = false, insertable = false),
-            @JoinColumn(name = "id", referencedColumnName = "id", updatable = false, insertable = false)
-    })
+    @JsonIgnore
+    @OneToMany(mappedBy = "provider")
     private List<Deal> dealList = new ArrayList<>();
 
-    public Provider(AppId appId, String name, String firstName, String lastName, float latitude, float longitude, Set<Product> products) {
+    public Provider(AppId appId, String name, String firstName, String lastName, float latitude, float longitude, Date workDate, Set<Product> products, List<Deal> dealList) {
         this.appId = appId;
         this.name = name;
         this.firstName = firstName;
         this.lastName = lastName;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.workDate = workDate;
         this.products = products;
+        this.dealList = dealList;
+    }
+
+    public Provider addDeal(Deal deal) {
+        dealList.add(deal);
+        return this;
     }
 }
 

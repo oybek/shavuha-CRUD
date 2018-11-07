@@ -6,10 +6,7 @@ import com.oybek.shavuha.services.DealService;
 import com.oybek.shavuha.services.ProviderService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 public class WebController {
@@ -34,30 +31,32 @@ public class WebController {
 				, "Smith"
 				, 0.0f
 				, 0.0f
-				, new HashSet<Product>(Arrays.asList(
+                , null
+				, new HashSet<>(Arrays.asList(
 						new Product("Классическая", 100)
 						, new Product("Сырная", 120)))
+				, new ArrayList<>()
 		));
 
 		return "ok";
 	}
 
-	@RequestMapping("/createCustomer")
+	@RequestMapping("/customer/save")
 	public Customer createCustomer(@RequestBody Customer customer) {
 		return customerService.save(customer);
 	}
 
-	@RequestMapping("/createProvider")
+	@RequestMapping("/provider/save")
 	public Provider createProvider(@RequestBody Provider provider) {
 		return providerService.save(provider);
 	}
 
-	@RequestMapping("/createDeal")
+	@RequestMapping("/deal/save")
 	public Optional<Deal> createDeal(@RequestBody Deal deal) {
 	    return dealService.save(deal);
 	}
 
-	@RequestMapping("/findDeal")
+	@RequestMapping("/deal/find")
 	public Optional<Deal> findDeal(long id) {
 	    return dealService.findById(id);
 	}
@@ -66,6 +65,12 @@ public class WebController {
 	public Customer findCustomer(@RequestParam("app") String app
 			, @RequestParam("id") String id) {
 		return customerService.findById(new AppId(app, id)).orElse(null);
+	}
+
+	@RequestMapping("/getDeals")
+	public List<Deal> getProviderDeals(@RequestParam("app") String app
+			, @RequestParam("id") String id) {
+		return providerService.getDeals(new AppId(app, id));
 	}
 
 	@RequestMapping("/findAllCustomers")

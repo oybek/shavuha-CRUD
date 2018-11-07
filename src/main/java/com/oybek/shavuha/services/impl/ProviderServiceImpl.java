@@ -1,6 +1,7 @@
 package com.oybek.shavuha.services.impl;
 
 import com.oybek.shavuha.entities.AppId;
+import com.oybek.shavuha.entities.Deal;
 import com.oybek.shavuha.entities.Provider;
 import com.oybek.shavuha.repositories.ProviderRepository;
 import com.oybek.shavuha.services.ProviderService;
@@ -8,6 +9,7 @@ import com.sun.javafx.geom.Vec2f;
 import javafx.util.Pair;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -44,5 +46,12 @@ public class ProviderServiceImpl implements ProviderService {
                 .map(Pair::getValue)
                 .limit(n)
                 .collect(Collectors.toList());
+    }
+
+    public List<Deal> getDeals(AppId appId) {
+        return providerRepository
+                .findById(appId)
+                .map(Provider::getDealList)
+                .orElse(new ArrayList<>());
     }
 }

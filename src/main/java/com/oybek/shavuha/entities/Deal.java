@@ -1,5 +1,8 @@
 package com.oybek.shavuha.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,14 +21,14 @@ public class Deal implements Serializable {
     @GeneratedValue
     private long id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumns({
-            @JoinColumn(name = "provider_app", referencedColumnName = "app", updatable = false),
-            @JoinColumn(name = "provider_id", referencedColumnName = "id", updatable = false)
+            @JoinColumn(name = "provider_app", updatable = false),
+            @JoinColumn(name = "provider_id", updatable = false)
     })
     private Provider provider;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumns({
             @JoinColumn(name = "customer_app", updatable = false),
             @JoinColumn(name = "customer_id", updatable = false)

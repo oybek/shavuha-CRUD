@@ -3,8 +3,10 @@ package com.oybek.shavuha.services.impl;
 import com.oybek.shavuha.entities.AppId;
 import com.oybek.shavuha.entities.Customer;
 import com.oybek.shavuha.entities.Deal;
+import com.oybek.shavuha.entities.Provider;
 import com.oybek.shavuha.repositories.CustomerRepository;
 import com.oybek.shavuha.repositories.DealRepository;
+import com.oybek.shavuha.repositories.ProviderRepository;
 import com.oybek.shavuha.services.DealService;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +17,32 @@ public class DealServiceImpl implements DealService {
 
     private DealRepository dealRepository;
     private CustomerRepository customerRepository;
+    private ProviderRepository providerRepository;
 
-    DealServiceImpl(DealRepository dealRepository, CustomerRepository customerRepository) {
+    DealServiceImpl(DealRepository dealRepository
+            , CustomerRepository customerRepository
+            , ProviderRepository providerRepository) {
         this.dealRepository = dealRepository;
         this.customerRepository = customerRepository;
+        this.providerRepository = providerRepository;
     }
 
     public Optional<Deal> save(Deal deal) {
+        Optional<Provider> providerOpt = providerRepository.findById(deal.getProvider().getAppId());
+        if (!providerOpt.isPresent()) {
+            return Optional.empty();
+        }
+
+        Optional<Customer> customerOpt = customerRepository.findById(deal.getCustomer().getAppId());
+        if (!customerOpt.isPresent()) {
+            return Optional.empty();
+        }
+
+        deal.setProvider(providerOpt.get());
+        deal.setCustomer(customerOpt.get());
+        providerOpt.get().addDeal(deal);
+
+        providerRepository.save(providerOpt.get());
         return Optional.ofNullable(dealRepository.save(deal));
     }
 
