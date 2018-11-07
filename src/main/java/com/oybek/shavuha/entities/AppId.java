@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -27,17 +28,17 @@ public class AppId implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null) return false;
-        if (!AppId.class.isAssignableFrom(obj.getClass())) return false;
-        final AppId other = (AppId) obj;
-        return  this.app != null && this.app.equals(other.app) &&
-                this.id != null && this.id.equals(other.id);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AppId appId = (AppId) o;
+        return Objects.equals(app, appId.app) &&
+                Objects.equals(id, appId.id);
     }
 
     @Override
     public int hashCode() {
-        return 37*app.hashCode()+id.hashCode();
+        return Objects.hash(app, id);
     }
 }
 
