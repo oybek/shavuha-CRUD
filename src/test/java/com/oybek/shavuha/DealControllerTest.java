@@ -89,6 +89,51 @@ public class DealControllerTest {
                     , new TypeReference<List<Deal>>(){});
             assert(savedDeal.equals(responseList.get(0)));
         }
+
+        // close deal
+        {
+            HttpEntity<Provider> entity = new HttpEntity<>(null, headers);
+
+            ResponseEntity<Deal> response = restTemplate.exchange(
+                    createLocalURL("/deal/close?id=" + savedDeal.getId())
+                    , HttpMethod.GET
+                    , entity
+                    , Deal.class
+            );
+
+            assert(response.getBody() != null);
+            assert(!response.getBody().isOpen());
+        }
+
+        // provider dealList check
+        {
+            HttpEntity<Provider> entity = new HttpEntity<>(provider, headers);
+
+            ResponseEntity<ArrayList> response = restTemplate.exchange(
+                    createLocalURL(String.format("/provider/getOpenDeals"))
+                    , HttpMethod.POST
+                    , entity
+                    , ArrayList.class
+            );
+
+            assert(response.getBody() != null);
+            assert(response.getBody().size() == 0);
+        }
+
+        // customer open dealList check
+        {
+            HttpEntity<Customer> entity = new HttpEntity<>(customer, headers);
+
+            ResponseEntity<ArrayList> response = restTemplate.exchange(
+                    createLocalURL(String.format("/customer/getOpenDeals"))
+                    , HttpMethod.POST
+                    , entity
+                    , ArrayList.class
+            );
+
+            assert(response.getBody() != null);
+            assert(response.getBody().size() == 0);
+        }
     }
 
     private Provider findProvider(AppId appId) {
